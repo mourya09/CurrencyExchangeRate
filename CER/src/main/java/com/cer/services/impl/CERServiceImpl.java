@@ -57,6 +57,7 @@ public class CERServiceImpl implements CERService {
 			logger.error("Request you to please provide the Currency Details");
 			return result;
 		}
+		userDetail = userDetailsService.getUserDetails(userDetail.getId());
 		UserRole userRole= userDetailsService.getUserRole(userDetail)	;
 		if(userRole != null && userRole.getIsCurrencyAddAllow())
 		{

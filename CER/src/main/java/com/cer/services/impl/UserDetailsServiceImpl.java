@@ -65,8 +65,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				
 			}
 		this.deleteUserRole(userDetails);
-		cerDao.delete(userDetails);
-		
+		userDetails = this.getUserDetails(userDetails.getId());
+		if(userDetails != null){
+			logger.info("UserDetails are not empty!!!");
+			cerDao.delete(userDetails);
+		}
 		result = true;
 		}catch( Exception ex)
 		{
@@ -81,18 +84,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails updateUserDetails(UserDetails userDetails) {
 		logger.info("updateUserDetails start ");
 		UserDetails result = null;
-		try{
-		UserDetails temp = null;
-			List<UserDetails> list= 	(List)cerDao.find("from UserDetails where id=?",userDetails.getId());
-		temp = list.get(0);
-			temp.setEmailID(userDetails.getEmailID());
-		temp.setFirstName(userDetails.getFirstName());
-		temp.setLastName(userDetails.getLastName());
-		temp.setLastModifiedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-		temp.setPassword(userDetails.getPassword());
-		result = temp;
-		}catch( Exception ex)
-		{
+		try {
+			UserDetails temp = null;
+			List<UserDetails> list = (List) cerDao.find("from UserDetails where id=?", userDetails.getId());
+			if (list.size() > 0) {
+				temp = list.get(0);
+				temp.setEmailID(userDetails.getEmailID());
+				temp.setFirstName(userDetails.getFirstName());
+				temp.setLastName(userDetails.getLastName());
+				temp.setLastModifiedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+				temp.setPassword(userDetails.getPassword());
+				result = temp;
+			}
+		} catch (Exception ex) {
 			logger.error(ex);
 			ex.printStackTrace();
 		}
@@ -107,7 +111,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		try{
 			UserDetails temp = null;
 			List<UserDetails> list= 	(List)cerDao.find("from UserDetails where id=?",userId);
-		temp = list.get(0);
+		if(list != null && list.size() > 0){
+			temp = list.get(0);
+		}
 		result = temp;
 		}catch( Exception ex)
 		{
@@ -192,8 +198,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		logger.info("deleteUserRoles start ");
 		Boolean result = false;
 		try{
-			UserRole temp =(UserRole) cerDao.find("from UserRole where userId=?", new Object[]{userDetails.getId()});
-			cerDao.delete(temp);			
+			UserRole temp =null;
+			logger.info("Delete request for UserDetails " + userDetails.getId());
+			List<UserRole> list =(List<UserRole>) cerDao.find("from UserRole ur where ur.userId.id=?", new Object[]{userDetails.getId()});
+			if(list != null && list.size() > 0 && list.get(0) != null)
+			{
+				logger.info("Obtained UserDetails for " + list.get(0));
+				temp = list.get(0);
+				temp.setUserId(null);
+				list = null;
+				cerDao.delete(temp);
+			}
+						
 		result = true;
 		}catch( Exception ex)
 		{
@@ -213,7 +229,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return result;
 		}else
 		{
-			List<UserRole> list = cerDao.find("from UserDetails where userId=? ", userDetails.getId());
+			List<UserRole> list = cerDao.find("from UserRole where userId.id=? ", userDetails.getId());
 			if(list.size() > 0)
 			{
 				result = list.get(0);//Only one entry is allowed for a particular User ID

@@ -44,6 +44,7 @@ public class UserDetailsServiceTest {
 		u.setFirstName("Praveen1");
 		u.setLastName("Kumar1");
 		u.setEmailID("mourya.09@gmail.com");
+		u.setPassword("mourya09");
 		u.setCreationDate(new Date());
 		u.setLastModifiedDate(new Date());
 		userDetailsService.addUsersDetails(u);
@@ -59,6 +60,7 @@ public class UserDetailsServiceTest {
 		u.setFirstName("John");
 		u.setLastName("Kamthan");
 		u.setId(1L);
+		u.setPassword("mourya09");
 		u.setEmailID("mourya.0911@gmail.com");
 		u.setLastModifiedDate(new Date());
 		u = userDetailsService.updateUserDetails(u);
@@ -102,7 +104,7 @@ public class UserDetailsServiceTest {
 		ur.setIsCurrencyDeleteAllow(true);
 		ur.setIsCurrencyUpdateAllow(true);
 		ur.setRoleName("Admin");
-		UserDetails ud = userDetailsService.getUserDetails(1L);
+		UserDetails ud = userDetailsService.getUserDetails(2L);
 		ur.setUserId(ud);
 		boolean result = userDetailsService.addUserRole(ud, ur);
 		if(result)
