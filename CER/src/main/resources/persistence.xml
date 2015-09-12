@@ -1,0 +1,51 @@
+<!-- <persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	version="1.0">
+
+	<persistence-unit name="hibernatePersistenceUnit"
+		transaction-type="RESOURCE_LOCAL">
+		<class>com.cer.persistent.UserDetails</class>
+		<class>com.cer.persistent.UserAddresses</class>	
+		<class>com.cer.persistent.UserMappedLocation</class>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.spatial.dialect.postgis.PostgisDialect"/>
+
+           <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+           <property name="hibernate.connection.url" value="jdbc:postgresql://152.144.227.172:5432/gisdb"/>
+           <property name="hibernate.connection.username" value="gisdb_user"/>
+           <property name="hibernate.connection.password" value="mourya09"/>
+           <property name="hibernate.connection.pool_size" value="5"/>
+
+           <property name="hibernate.show_sql" value="true"/>
+           <property name="hibernate.format_sql" value="true"/>
+
+           <property name="hibernate.max_fetch_depth" value="5"/>
+
+           <property name="hibernate.hbm2ddl.auto" value="update"/>
+		</properties>
+	</persistence-unit>
+
+</persistence>	 -->
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        
+        connection details
+        <property name="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://152.144.227.172:5432/gisdb</property>
+        <property name="hibernate.connection.username">gisdb_user</property>
+        <property name="hibernate.connection.password">mourya09</property>
+        @see: http://community.jboss.org/wiki/HibernateCoreMigrationGuide36
+        <property name="hibernate.jdbc.use_streams_for_binary">false</property>
+        
+        mappings for annotated classes
+        <mapping class="com.cer.persistent.UserDetails"/>
+        <mapping class="com.cer.persistent.UserAddresses"/>
+        <mapping class="com.cer.persistent.UserMappedLocation"/>
+
+        
+    </session-factory>
+</hibernate-configuration> -->

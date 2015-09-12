@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:sws="http://www.springframework.org/schema/web-services"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+							http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+							http://www.springframework.org/schema/oxm
+							http://www.springframework.org/schema/oxm/spring-oxm-4.0.xsd
+							http://www.springframework.org/schema/web-services 
+							http://www.springframework.org/schema/web-services/web-services-2.0.xsd
+							http://www.springframework.org/schema/tx
+	   						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+							http://www.springframework.org/schema/util
+  							http://www.springframework.org/schema/util/spring-util-4.0.xsd
+  							http://www.springframework.org/schema/aop
+	   						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+
+	<mvc:annotation-driven />
+	<context:component-scan base-package="com.cer" />
+	<context:annotation-config />
+
+	<!-- PROPERTY CONFUGURER -->
+	<bean id="propertyConfigurer" class="com.cer.util.PropertyConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:messages.properties</value>
+				<value>classpath:MS-messages.properties</value>
+				<value>classpath:configuration.properties</value>
+				<value>classpath:sqlQueries.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="telenorTransactionManager" />
+
+	<!-- Transaction Manager -->
+
+	<bean id="telenorTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceBean" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+	</bean>
+	<!-- Declare a JPA entityManagerFactory -->
+	<!-- <bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation" value="classpath:persistence.xml"></property>
+		<property name="persistenceUnitName" value="hibernatePersistenceUnit" />
+		<property name="dataSource" ref="dataSourceBean" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean> -->
+
+	 <bean id="dataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+		<property name="driverClassName" value="${driverClassName}" /> <property 
+		name="url" value="${databaseUrlEgis}" /> <property name="username" value="${liDatabaseUserName}" 
+		/> <property name="password" value="${liDatabasePassword}" /> </bean> 
+	
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	 <bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+					<property name="viewClass"
+						value="org.springframework.web.servlet.view.JstlView" />
+					<property name="prefix" value="/WEB-INF/jsp/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+					<property name="prefixJson" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="jsonMessageConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<util:list id="beanList">
+				<ref bean="jsonMessageConverter" />
+			</util:list>
+		</property>
+	</bean> 
+
+
+
+
+	<bean id="cerDao" class="com.cer.dao.impl.CERDaoImpl" scope="singleton" />
+
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+
+	
+
+
+
+</beans>

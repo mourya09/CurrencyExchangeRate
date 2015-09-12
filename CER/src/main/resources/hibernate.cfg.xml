@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        
+        <!-- connection details -->
+ <!-- connection details -->
+        <property name="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://152.144.227.172:5432/postgres</property>
+        <property name="hibernate.connection.username">regina</property>
+        <property name="hibernate.connection.password">mourya09</property>
+        <!-- @see: http://community.jboss.org/wiki/HibernateCoreMigrationGuide36 -->
+        <property name="hibernate.jdbc.use_streams_for_binary">true</property>
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.max_fetch_depth">5</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- mappings for annotated classes -->
+                <!-- mappings for annotated classes -->
+        <mapping class="com.cer.persistent.UserDetails"/>
+        <mapping class="com.cer.persistent.UserRole"/>
+        <mapping class="com.cer.persistent.Currency"/>
+         <mapping class="com.cer.persistent.CurrencyExchangeRate"/>
+    </session-factory>
+</hibernate-configuration>
